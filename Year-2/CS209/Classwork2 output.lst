@@ -1,0 +1,430 @@
+SQL> start Classwork2
+SQL> DROP TABLE INTRODUCED;
+
+Table dropped.
+
+SQL> DROP TABLE PAINTS;
+
+Table dropped.
+
+SQL> DROP TABLE LOCATED;
+
+Table dropped.
+
+SQL> DROP TABLE OWNER_HISTORY;
+
+Table dropped.
+
+SQL> DROP TABLE EXHIBITION;
+
+Table dropped.
+
+SQL> DROP TABLE IN_GALLERY;
+
+Table dropped.
+
+SQL> DROP TABLE ON_LOAN;
+
+Table dropped.
+
+SQL> DROP TABLE ROOM;
+
+Table dropped.
+
+SQL> DROP TABLE INSURANCE_CERT;
+
+Table dropped.
+
+SQL> DROP TABLE PAINTING;
+
+Table dropped.
+
+SQL> DROP TABLE OWNER;
+
+Table dropped.
+
+SQL> DROP TABLE ARTIST;
+
+Table dropped.
+
+SQL> 
+SQL> CREATE TABLE ARTIST
+  2  (A_id	     CHAR(15)	     CONSTRAINT ART_PK primary key,
+  3  NAME	     CHAR(15)	     CONSTRAINT NULL_ARTIST NOT NULL,
+  4  DOB	     DATE	     CONSTRAINT NULL_DOB NOT NULL,
+  5  DOD	     DATE,
+  6  NATIONALITY     CHAR(15)	     CONSTRAINT NULL_NAT NOT NULL);
+
+Table created.
+
+SQL> 
+SQL> INSERT INTO ARTIST(A_id, NAME, DOB, DOD, NATIONALITY) VALUES
+  2  				     (13253460, 'CAMERON', '12-MAY-1966', '01-JAN-2013', 'SCOTTISH');
+
+1 row created.
+
+SQL> INSERT INTO ARTIST(A_id, NAME, DOB, DOD, NATIONALITY) VALUES
+  2  				     (23765876, 'STUART', '25-DEC-1810', '23-FEB-1855', 'ITALIAN');
+
+1 row created.
+
+SQL> INSERT INTO ARTIST(A_id, NAME, DOB, DOD, NATIONALITY) VALUES
+  2  				     (36585433, 'ANGUS', '05-MAR-2000', '07-JUN-2005', 'FRENCH');
+
+1 row created.
+
+SQL> INSERT INTO ARTIST(A_id, NAME, DOB, DOD, NATIONALITY) VALUES
+  2  				     (49789651, 'MICHAEL', '16-AUG-1986', '22-SEP-2000', 'COLUMBIAN');
+
+1 row created.
+
+SQL> 
+SQL> CREATE TABLE PAINTING
+  2  (P_id	     CHAR(15)	     CONSTRAINT P_PK primary key,
+  3  TITLE	     CHAR(15)	     CONSTRAINT NULL_TITLE NOT NULL,
+  4  VALUE	     NUMBER(15,2)    CONSTRAINT NULL_VALUE NOT NULL
+  5  				     CONSTRAINT PVAL_CHECK CHECK(VALUE>0),
+  6  AQUISITION_DATE DATE,
+  7  INSURANCE_VALUE NUMBER(15,2));
+
+Table created.
+
+SQL> 
+SQL> INSERT INTO PAINTING(P_id, TITLE, VALUE, AQUISITION_DATE, INSURANCE_VALUE) VALUES
+  2  				     (43987498, 'MONA', 100000.00, '10-MAR-1888', 150000.00);
+
+1 row created.
+
+SQL> INSERT INTO PAINTING(P_id, TITLE, VALUE, AQUISITION_DATE, INSURANCE_VALUE) VALUES
+  2  				     (83745844, 'LISA', 1000.00, '13-FEB-1844', 1500.00);
+
+1 row created.
+
+SQL> INSERT INTO PAINTING(P_id, TITLE, VALUE, AQUISITION_DATE, INSURANCE_VALUE) VALUES
+  2  				     (98648974, 'SHREK', 9999.99, '10-AUG-2002', 12000.00);
+
+1 row created.
+
+SQL> INSERT INTO PAINTING(P_id, TITLE, VALUE, AQUISITION_DATE, INSURANCE_VALUE) VALUES
+  2  				     (40987598, 'FIONA', 599.99, '05-APR-1992', 650.00);
+
+1 row created.
+
+SQL> 
+SQL> CREATE TABLE OWNER
+  2  (O_id	     CHAR(15)	     CONSTRAINT OWNER_PK primary key,
+  3  NAME	     CHAR(15)	     CONSTRAINT NULL_OWNERNAME NOT NULL);
+
+Table created.
+
+SQL> 
+SQL> INSERT INTO OWNER(O_id, NAME) VALUES
+  2  				     (23857905, 'BRUNO');
+
+1 row created.
+
+SQL> INSERT INTO OWNER(O_id, NAME) VALUES
+  2  				     (89769966, 'IAIN');
+
+1 row created.
+
+SQL> INSERT INTO OWNER(O_id, NAME) VALUES
+  2  				     (68975495, 'ADAM');
+
+1 row created.
+
+SQL> INSERT INTO OWNER(O_id, NAME) VALUES
+  2  				     (67548555, 'GREGOR');
+
+1 row created.
+
+SQL> 
+SQL> CREATE TABLE OWNER_HISTORY
+  2  (OH_id	     CHAR(15)	     CONSTRAINT OWNERHIS_PK primary key,
+  3  DATE_BOUGHT     DATE	     CONSTRAINT NULL_BOUGHT NOT NULL,
+  4  DATE_SOLD	     DATE	     CONSTRAINT NULL_SOLD NOT NULL,
+  5  P_id	     CHAR(15)	     CONSTRAINT OWNERHIS_P_id_FK REFERENCES
+  6  				     PAINTING(P_id) ON DELETE CASCADE,
+  7  O_id	     CHAR(15)	     CONSTRAINT OWNERHIS_O_id_FK REFERENCES
+  8  				     OWNER(O_id) ON DELETE CASCADE);
+
+Table created.
+
+SQL> 
+SQL> INSERT INTO OWNER_HISTORY(OH_id, DATE_BOUGHT, DATE_SOLD, P_id, O_id) VALUES
+  2  				     (89769966, '15-DEC-1985', '30-JUN-2000',
+  3  				     43987498, 23857905);
+
+1 row created.
+
+SQL> INSERT INTO OWNER_HISTORY(OH_id, DATE_BOUGHT, DATE_SOLD, P_id, O_id) VALUES
+  2  				     (23857905, '06-FEB-1860', '22-AUG-1967',
+  3  				     98648974, 89769966);
+
+1 row created.
+
+SQL> INSERT INTO OWNER_HISTORY(OH_id, DATE_BOUGHT, DATE_SOLD, P_id, O_id) VALUES
+  2  				     (67548555, '17-MAR-2012', '04-MAY-2013',
+  3  				     98648974, 68975495);
+
+1 row created.
+
+SQL> INSERT INTO OWNER_HISTORY(OH_id, DATE_BOUGHT, DATE_SOLD, P_id, O_id) VALUES
+  2  				     (68975495, '27-MAY-1999', '27-JUL-2005',
+  3  				     40987598, 67548555);
+
+1 row created.
+
+SQL> 
+SQL> CREATE TABLE IN_GALLERY
+  2  (P_id	     CHAR(15)	     CONSTRAINT INGALL_PK primary key
+  3  				     CONSTRAINT INGALL_FK REFERENCES
+  4  				     PAINTING(P_id) ON DELETE CASCADE);
+
+Table created.
+
+SQL> 
+SQL> INSERT INTO IN_GALLERY(P_id) VALUES (43987498);
+
+1 row created.
+
+SQL> INSERT INTO IN_GALLERY(P_id) VALUES (83745844);
+
+1 row created.
+
+SQL> 
+SQL> CREATE TABLE ON_LOAN
+  2  (P_id	     CHAR(15)	     CONSTRAINT ONLOAN_PK primary key
+  3  				     CONSTRAINT ONLOAN_FK REFERENCES
+  4  				     PAINTING(P_id) ON DELETE CASCADE);
+
+Table created.
+
+SQL> 
+SQL> INSERT INTO ON_LOAN(P_id) VALUES (98648974);
+
+1 row created.
+
+SQL> INSERT INTO ON_LOAN(P_id) VALUES (40987598);
+
+1 row created.
+
+SQL> 
+SQL> CREATE TABLE ROOM
+  2  (R_No	     NUMBER(3,0)     CONSTRAINT ROOM_PK primary key,
+  3  TEMPERATURE     NUMBER(3,1)     CONSTRAINT NULL_TEMP NOT NULL,
+  4  HUMIDITY	     NUMBER(3,1)     CONSTRAINT NULL_HUMID NOT NULL);
+
+Table created.
+
+SQL> 
+SQL> INSERT INTO ROOM(R_No, TEMPERATURE, HUMIDITY) VALUES
+  2  				     (298, 32.1, 56.4);
+
+1 row created.
+
+SQL> INSERT INTO ROOM(R_No, TEMPERATURE, HUMIDITY) VALUES
+  2  				     (250, 24.7, 40.5);
+
+1 row created.
+
+SQL> INSERT INTO ROOM(R_No, TEMPERATURE, HUMIDITY) VALUES
+  2  				     (650, 44.6, 77.8);
+
+1 row created.
+
+SQL> INSERT INTO ROOM(R_No, TEMPERATURE, HUMIDITY) VALUES
+  2  				     (976, 30.7, 53.9);
+
+1 row created.
+
+SQL> 
+SQL> CREATE TABLE INSURANCE_CERT
+  2  (CERTid	     CHAR(15)	     CONSTRAINT INSUR_PK primary key,
+  3  INSURER	     CHAR(15)	     CONSTRAINT NULL_INSURER NOT NULL);
+
+Table created.
+
+SQL> 
+SQL> INSERT INTO INSURANCE_CERT(CERTid, INSURER) VALUES
+  2  				     (13124235, 'AVIVA');
+
+1 row created.
+
+SQL> INSERT INTO INSURANCE_CERT(CERTid, INSURER) VALUES
+  2  				     (45687340, 'ONEBANK');
+
+1 row created.
+
+SQL> INSERT INTO INSURANCE_CERT(CERTid, INSURER) VALUES
+  2  				     (23589793, 'INSURAPARE');
+
+1 row created.
+
+SQL> INSERT INTO INSURANCE_CERT(CERTid, INSURER) VALUES
+  2  				     (21109748, 'PAINTINSURE');
+
+1 row created.
+
+SQL> 
+SQL> CREATE TABLE EXHIBITION
+  2  (VENUE	     CHAR(15)	     CONSTRAINT NULL_VENUE NOT NULL,
+  3  UTITLE	     CHAR(15)	     CONSTRAINT EXHIB_PK primary key,
+  4  STARTDATE	     DATE	     CONSTRAINT NULL_STARTDATE NOT NULL,
+  5  FINSHDATE	     DATE	     CONSTRAINT NULL_FINISHDATE NOT NULL,
+  6  SPONSORS	     CHAR(15)	     CONSTRAINT NULL_SPONSORS NOT NULL);
+
+Table created.
+
+SQL> 
+SQL> INSERT INTO EXHIBITION(VENUE, UTITLE, STARTDATE, FINSHDATE, SPONSORS) VALUES
+  2  				     ('RUGBY PARK', 'RP', '01-JAN-1888', '07-JAN-1888', 'UNITE');
+
+1 row created.
+
+SQL> INSERT INTO EXHIBITION(VENUE, UTITLE, STARTDATE, FINSHDATE, SPONSORS) VALUES
+  2  				     ('PARK HEAD', 'PH', '30-MAY-1789', '22-AUG-1789', 'JANSPORT');
+
+1 row created.
+
+SQL> INSERT INTO EXHIBITION(VENUE, UTITLE, STARTDATE, FINSHDATE, SPONSORS) VALUES
+  2  				     ('IBROX', 'IB', '11-JUN-1688', '2-FEB-1689', 'RIVER');
+
+1 row created.
+
+SQL> INSERT INTO EXHIBITION(VENUE, UTITLE, STARTDATE, FINSHDATE, SPONSORS) VALUES
+  2  				     ('TANNANDICE', 'TA', '07-DEC-1890', '02-AUG-1891', 'PIES');
+
+1 row created.
+
+SQL> 
+SQL> CREATE TABLE PAINTS
+  2  (A_id	     CHAR(15)	     CONSTRAINT PAINTS_A_id_FK REFERENCES
+  3  				     ARTIST(A_id) ON DELETE CASCADE,
+  4  P_id	     CHAR(15)	     CONSTRAINT PAINTS_P_id_FK REFERENCES
+  5  				     PAINTING(P_id) ON DELETE CASCADE,
+  6  				     CONSTRAINT PAINTS_PK primary key(A_id,P_id));
+
+Table created.
+
+SQL> 
+SQL> INSERT INTO PAINTS(A_id, P_id) VALUES (13253460, 43987498);
+
+1 row created.
+
+SQL> INSERT INTO PAINTS(A_id, P_id) VALUES (23765876, 83745844);
+
+1 row created.
+
+SQL> INSERT INTO PAINTS(A_id, P_id) VALUES (36585433, 98648974);
+
+1 row created.
+
+SQL> INSERT INTO PAINTS(A_id, P_id) VALUES (49789651, 40987598);
+
+1 row created.
+
+SQL> 
+SQL> CREATE TABLE LOCATED
+  2  (R_No	     NUMBER(3,0)     CONSTRAINT LOCATED_R_No_FK REFERENCES
+  3  				     ROOM(R_No) ON DELETE CASCADE,
+  4  P_id	     CHAR(15)	     CONSTRAINT LOCATED_P_id_FK REFERENCES
+  5  				     PAINTING(P_id) ON DELETE CASCADE,
+  6  				     CONSTRAINT LOCATED_PK primary key(R_No,P_id));
+
+Table created.
+
+SQL> 
+SQL> INSERT INTO LOCATED(R_No, P_id) VALUES (298, 43987498);
+
+1 row created.
+
+SQL> INSERT INTO LOCATED(R_No, P_id) VALUES (250, 83745844);
+
+1 row created.
+
+SQL> INSERT INTO LOCATED(R_No, P_id) VALUES (650, 98648974);
+
+1 row created.
+
+SQL> INSERT INTO LOCATED(R_No, P_id) VALUES (976, 40987598);
+
+1 row created.
+
+SQL> 
+SQL> CREATE TABLE INTRODUCED
+  2  (O_id	     CHAR(15)	     CONSTRAINT INTRO_O_id_FK REFERENCES
+  3  				     OWNER(O_id) ON DELETE CASCADE,
+  4  O_id1	     CHAR(15)	     CONSTRAINT INTRO_O_id1_FK REFERENCES
+  5  				     OWNER(O_id) ON DELETE CASCADE,
+  6  				     CONSTRAINT INTRO_PK primary key(O_id));
+
+Table created.
+
+SQL> 
+SQL> INSERT INTO INTRODUCED(O_id, O_id1) VALUES (23857905, 89769966);
+
+1 row created.
+
+SQL> INSERT INTO INTRODUCED(O_id, O_id1) VALUES (68975495, 23857905);
+
+1 row created.
+
+SQL> INSERT INTO INTRODUCED(O_id, O_id1) VALUES (89769966, 67548555);
+
+1 row created.
+
+SQL> INSERT INTO INTRODUCED(O_id, O_id1) VALUES (67548555, 68975495);
+
+1 row created.
+
+SQL> 
+SQL> SELECT pa.TITLE, pa.VALUE, oh.OH_id
+  2  	     FROM PAINTING pa
+  3  	     JOIN OWNER_HISTORY oh
+  4  	     ON pa.P_id = oh.P_id
+  5  	     WHERE VALUE > 1000
+  6  	     GROUP BY pa.TITLE, pa.VALUE, oh.OH_id;
+
+TITLE                VALUE OH_ID                                                                                                            
+--------------- ---------- ---------------                                                                                                  
+MONA                100000 89769966                                                                                                         
+SHREK              9999.99 23857905                                                                                                         
+SHREK              9999.99 67548555                                                                                                         
+
+SQL> 
+SQL> SELECT TITLE, VALUE
+  2  	     FROM PAINTING
+  3  	     WHERE VALUE IN (SELECT VALUE
+  4  	     FROM PAINTING
+  5  	     WHERE VALUE > 999);
+
+TITLE                VALUE                                                                                                                  
+--------------- ----------                                                                                                                  
+MONA                100000                                                                                                                  
+LISA                  1000                                                                                                                  
+SHREK              9999.99                                                                                                                  
+
+SQL> 
+SQL> SELECT P_id, DATE_SOLD
+  2  	     FROM OWNER_HISTORY
+  3  	     WHERE DATE_SOLD IN (SELECT max(DATE_SOLD)
+  4  	     FROM OWNER_HISTORY);
+
+P_ID            DATE_SOLD                                                                                                                   
+--------------- ---------                                                                                                                   
+98648974        04-MAY-13                                                                                                                   
+
+SQL> 
+SQL> SELECT i.O_id ||'Introduces '|| i1.O_id1
+  2  	     FROM INTRODUCED i, INTRODUCED i1
+  3  	     WHERE i.O_id = i1.O_id;
+
+I.O_ID||'INTRODUCES'||I1.O_ID1                                                                                                              
+-----------------------------------------                                                                                                   
+23857905       Introduces 89769966                                                                                                          
+68975495       Introduces 23857905                                                                                                          
+89769966       Introduces 67548555                                                                                                          
+67548555       Introduces 68975495                                                                                                          
+
+SQL> spool off

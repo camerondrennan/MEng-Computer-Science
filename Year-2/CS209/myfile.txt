@@ -1,0 +1,9 @@
+rk for databases is most easily car
+ried out using Linux. If the computer you
+are going to use displays the text “Press CTRL ALT
+DELETE to log in”, it is in Windows
+mode and you will firstly have to re-boot it to Lin
+ux mode. To do this, select restart from the
+icon in the lower right corner of the screen. Befor
+e the computer loads an operating system, it
+allows you to choose Linux by using the cursor key
